@@ -48,6 +48,7 @@ def getRidOfDuplicate(allCourseList):
         if i not in courseWithoutDuplicate:
             courseWithoutDuplicate.append(i)
 
+    return courseWithoutDuplicate
     print(courseWithoutDuplicate)
 
 
