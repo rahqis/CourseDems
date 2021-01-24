@@ -1,4 +1,7 @@
 # List classes and demographics of each class for this college
+
+
+
 import csv
 
 f = open("test_python.csv")
@@ -33,9 +36,6 @@ Hispanic: str = "Hispanic/Latinx"
 Middle: str = "Middle-Eastern/North African"
 Native: str = "American Indian or Alaska Native"
 
-
-
-
 def specific_race(course: str) -> dict[str, float]:
     x: float = race_counter(course, Black)
     y: float = race_counter(course, Asian)
@@ -55,13 +55,41 @@ def specific_race(course: str) -> dict[str, float]:
     return o
 
 
-print(specific_race("MATH 381"))
+def gender(course: str) -> dict[str, float]:
+    r: int = 0
+    e: int = 0
 
+    for i in range(0,len(courseNameCvs)):
+        if(course in courseNameCvs[i]):
+            if(genderCvs[i] == "Male"):
+                r += 1
+            if(genderCvs[i] == "Female"):
+                e += 1
+
+    total: int = r + e
+    Female_distribution: float = e/total
+    Male_distribution: float = r/total
+    gender_distribution: dict[str, float] = {}
+    gender_distribution["Male"] = Male_distribution
+    gender_distribution["Female"] = Female_distribution
+    return gender_distribution
+
+
+def class_info(course: str) -> dict[str, dict[str, float], dict[str, float]]:
+    race_distribution_dict: dict[str, float] = specific_race(course)
+    gender_distribution_dict: dict[str, float] = gender(course)
+    class_demographics: dict[str, dict[str, float], dict[str, float]] = {}
+    class_demographics[course] = race_distribution_dict, gender_distribution_dict
+    return class_demographics
+
+
+
+
+print(class_info("COMP 210"))
 
 
 
 f.close()
-
 
 
 
