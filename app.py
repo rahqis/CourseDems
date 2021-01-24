@@ -21,6 +21,10 @@ raceLabels = ['White/Caucasian', 'Asian/Pacific-Islander', 'Hispanic/Latinx',
 
 course = ""
 
+uncCourse = ['ENGL 105', 'COMP 210', 'COMP 211', 'COMP 301',
+             'MATH 381', 'CHEM 241', 'BIOL 202', 'CHEM 101']
+
+
 if collegeDropDown == "Duke":
     course = st.sidebar.selectbox("Courses", [])
     if course == None:
@@ -29,9 +33,12 @@ if collegeDropDown == "Duke":
 
 if collegeDropDown == "North Carolina State University":
     course = st.sidebar.selectbox("Courses", [])
+    if course == None:
+        st.sidebar.write(
+            'It seems like no courses have been reported. More data coming soon!')
 
 if collegeDropDown == "University of North Carolina at Chapel Hill":
-    course = st.sidebar.selectbox("Courses", ['ENGL105'])
+    course = st.sidebar.selectbox("Courses", uncCourse)
 
 if collegeDropDown == "University of North Carolina at Charlotte":
     course = st.sidebar.selectbox("Courses", [])
@@ -40,16 +47,27 @@ if collegeDropDown == "University of North Carolina at Charlotte":
             'It seems like no courses have been reported. More data coming soon!')
 
 if course != None and course != "":
-    explode = []
     courseGender = unc.gender(course)
+    courseRace = unc.specific_race(course)
     GenVs = []
     for v in courseGender.values():
         GenVs.append(v)
     GenLabels = []
     for k in courseGender.keys():
         GenLabels.append(k)
-    for i in range(len(GenLabels)):
-        explode.append(0)
     genderDF = pd.DataFrame({'Gender': GenLabels, 'Percentages': GenVs})
-    fig = px.pie(genderDF, values='Percentages', names='Gender')
-    st.plotly_chart(fig)
+    figGen = px.pie(genderDF, values='Percentages', names='Gender')
+    st.subheader("Gender Breakdown for " + course)
+    st.plotly_chart(figGen)
+
+    RaceVs = []
+    for v in courseRace.values():
+        RaceVs.append(v)
+    RaceLabs = []
+    for k in courseRace.keys():
+        RaceLabs.append(k)
+    raceDF = pd.DataFrame({'Race': RaceLabs, 'Percentages': RaceVs})
+    figRace = px.pie(raceDF, values='Percentages', names='Race')
+    st.subheader("Racial Breakdown for " + course)
+    st.plotly_chart(figRace)
+
